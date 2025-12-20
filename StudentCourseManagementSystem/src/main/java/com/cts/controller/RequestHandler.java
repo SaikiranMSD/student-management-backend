@@ -1,5 +1,7 @@
 package com.cts.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -59,6 +61,14 @@ public class RequestHandler {
 		logger.info("Fetching course id for name: {}", courseName);
 		Integer courseId = service.getCourseId(courseName);
 		return courseId;
+	}
+
+	@GetMapping("/getalldata")
+	public ResponseEntity<List<Course>> getAllCourseData() {
+		logger.info("Getting all course data");
+		List<Course> allCourseData = service.getAllCourses();
+		logger.info("Retrieved all course data: {}", allCourseData);
+		return new ResponseEntity<>(allCourseData, HttpStatus.OK);
 	}
 
 }

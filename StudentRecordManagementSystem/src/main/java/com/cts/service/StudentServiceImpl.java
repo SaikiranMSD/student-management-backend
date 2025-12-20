@@ -86,4 +86,16 @@ public class StudentServiceImpl implements IStudentService {
 		logger.info("Retrieved all student data: {}", getAllStudentData);
 		return getAllStudentData;
 	}
+
+	@Override
+	public Student getStudentByName(String studentName) {
+		logger.info("Getting student data for name: {}", studentName);
+		Student student = dao.findByStudentName(studentName);
+		if (student != null) {
+			logger.info("Retrieved student data: {}", student);
+			return student;
+		} else {
+			throw new StudentNotFoundException("Record Not Found With the given name " + studentName);
+		}
+	}
 }

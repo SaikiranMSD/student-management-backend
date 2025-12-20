@@ -1,5 +1,6 @@
 package com.cts.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -79,5 +80,13 @@ public class CourseServiceImpl implements ICourseService {
 			logger.error("Course Not Found With the given courseName {}", courseName);
 			throw new CourseNotFoundException("Course Not Found With the given courseName " + courseName);
 		}
+	}
+
+	@Override
+	public List<Course> getAllCourses() {
+		logger.info("Getting all courses");
+		List<Course> allCourses = dao.findAll();
+		logger.info("Retrieved all courses: {}", allCourses);
+		return allCourses;
 	}
 }

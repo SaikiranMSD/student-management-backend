@@ -1,5 +1,7 @@
 package com.cts.service;
 
+import java.util.List;
+
 import com.cts.entity.Course;
 
 public interface ICourseService {
@@ -13,5 +15,7 @@ public interface ICourseService {
 	public Course getCourse(Integer id);
 
 	public Integer getCourseId(String courseName);
+
+	public List<Course> getAllCourses();
 
 }
