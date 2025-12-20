@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cts.dao.IUserManagement;
 import com.cts.entity.Student;
+import com.cts.entity.User;
 import com.cts.service.StudentServiceImpl;
 
 @RestController
@@ -27,6 +29,9 @@ public class RequestHandler {
 
 	@Autowired
 	private StudentServiceImpl service;
+
+	@Autowired
+	private IUserManagement userDao;
 
 	@GetMapping("/getdata/{id}")
 	public ResponseEntity<Student> getStudentInfo(@PathVariable("id") Integer id) {
@@ -66,5 +71,50 @@ public class RequestHandler {
 		List<Student> allStudentData = service.getAllStudentData();
 		logger.info("Retrieved all student data: {}", allStudentData);
 		return new ResponseEntity<>(allStudentData, HttpStatus.OK);
+	}
+
+	@GetMapping("/getdatabyname/{name}")
+	public ResponseEntity<Student> getStudentByName(@PathVariable("name") String name) {
+		logger.info("Getting student information for name: {}", name);
+		Student student = service.getStudentByName(name);
+		logger.info("Retrieved student information: {}", student);
+		return new ResponseEntity<>(student, HttpStatus.OK);
+	}
+
+	// User Management Endpoints
+	@GetMapping("/getalluser")
+	public ResponseEntity<List<User>> getAllUsers() {
+		logger.info("Getting all users");
+		List<User> allUsers = userDao.findAll();
+		logger.info("Retrieved all users: {}", allUsers);
+		return new ResponseEntity<>(allUsers, HttpStatus.OK);
+	}
+
+	@PostMapping("/postuser")
+	public ResponseEntity<String> postUser(@Valid @RequestBody User user) {
+		logger.info("Registering new user: {}", user);
+		userDao.save(user);
+		logger.info("New user registered: {}", user.getUserName());
+		return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
+	}
+
+	@GetMapping("/getuserdata/{username}")
+	public ResponseEntity<User> getUserByName(@PathVariable("username") String username) {
+		logger.info("Getting user information for username: {}", username);
+		User user = userDao.findByUserName(username);
+		logger.info("Retrieved user information: {}", user);
+		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+
+	@DeleteMapping("/deleteuser/{username}")
+	public ResponseEntity<String> deleteUser(@PathVariable("username") String username) {
+		logger.info("Deleting user: {}", username);
+		User user = userDao.findByUserName(username);
+		if (user != null) {
+			userDao.delete(user);
+			logger.info("User deleted: {}", username);
+			return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
+		}
+		return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
 	}
 }

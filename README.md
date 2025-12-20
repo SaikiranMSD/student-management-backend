@@ -1,6 +1,6 @@
-# Student Management System - Microservices
+# Student Management System - Microservices Backend
 
-A **Spring Boot Microservices** backend for managing students, courses, and grades with service discovery and API gateway.
+A **Spring Boot Microservices** backend for managing students, courses, grades, and user authentication with service discovery and API gateway.
 
 ## 🏗️ Architecture
 
@@ -32,7 +32,7 @@ A **Spring Boot Microservices** backend for managing students, courses, and grad
 | Service | Port | Description |
 |---------|------|-------------|
 | **Eureka Server** | 8761 | Service Discovery |
-| **Student Service** | 1111 | Student CRUD operations |
+| **Student Service** | 1111 | Student & User CRUD operations |
 | **Course Service** | 2222 | Course management |
 | **Grade Service** | 3333 | Grades & enrollment management |
 | **API Gateway** | 4444 | Zuul routing gateway |
@@ -62,11 +62,40 @@ cd StudentAPIGateway && mvn spring-boot:run             # Gateway
 
 **Base URL:** `http://localhost:4444/api`
 
-| Service | Route | Operations |
-|---------|-------|------------|
-| Student | `/api/service1/**` | GET, POST, PUT, DELETE |
-| Course | `/api/service2/**` | GET, POST, PUT, DELETE |
-| Grade | `/api/service3/**` | GET, POST, PUT, DELETE |
+### Student Service (`/api/service1`)
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/getalldata` | GET | Get all students |
+| `/getdata/{id}` | GET | Get student by ID |
+| `/getdatabyname/{name}` | GET | Get student by name |
+| `/postdata` | POST | Create student |
+| `/updatedata` | PUT | Update student |
+| `/deletedata/{id}` | DELETE | Delete student |
+
+### User Management (`/api/service1`)
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/getalluser` | GET | Get all users |
+| `/getuserdata/{username}` | GET | Get user by username |
+| `/postuser` | POST | Register user |
+| `/deleteuser/{username}` | DELETE | Delete user |
+
+### Course Service (`/api/service2`)
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/getalldata` | GET | Get all courses |
+| `/getdata/{id}` | GET | Get course by ID |
+| `/postdata` | POST | Create course |
+| `/updatedata` | PUT | Update course |
+| `/deletedata/{id}` | DELETE | Delete course |
+
+### Grade Service (`/api/service3`)
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/getAllStudentMarks` | GET | Get all marks |
+| `/getmarkssheet/{id}` | GET | Get marks by student ID |
+| `/postmarksdata/{id}/{m1}/{m2}` | POST | Add marks |
+| `/deletemarkssheet/{id}` | DELETE | Delete marks |
 
 ## ✨ Features
 
@@ -74,6 +103,7 @@ cd StudentAPIGateway && mvn spring-boot:run             # Gateway
 - **Service Discovery** - Dynamic registration with Eureka
 - **API Gateway** - Single entry point with Zuul
 - **Inter-Service Communication** - OpenFeign clients
+- **User Authentication** - Login/Signup functionality
 - **Data Validation** - Bean Validation API
 - **Exception Handling** - Global error handling
 
@@ -81,7 +111,7 @@ cd StudentAPIGateway && mvn spring-boot:run             # Gateway
 
 ```
 ├── StudentManagementServer/         # Eureka Server
-├── StudentRecordManagementSystem/   # Student CRUD
+├── StudentRecordManagementSystem/   # Student & User CRUD
 ├── StudentCourseManagementSystem/   # Course CRUD  
 ├── StudentGradeManagementSystem/    # Grade Management
 └── StudentAPIGateway/               # Zuul Gateway
@@ -90,4 +120,3 @@ cd StudentAPIGateway && mvn spring-boot:run             # Gateway
 ## 👤 Author
 
 **Saikiran MSD** - [@SaikiranMSD](https://github.com/SaikiranMSD)
-

@@ -16,4 +16,6 @@ public interface IStudentService {
 	
 	public List<Student> getAllStudentData();
 
+	public Student getStudentByName(String studentName);
+
 }
