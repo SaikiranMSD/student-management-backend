@@ -41,22 +41,49 @@ A **Spring Boot Microservices** backend for managing students, courses, grades, 
 
 - **Java 8** & **Spring Boot 2.7.11**
 - **Spring Cloud** (Eureka, Zuul, OpenFeign)
-- **Spring Data JPA** & **MySQL**
+- **Spring Data JPA**
+- **H2 Database** (Development - default)
+- **MySQL** (Production)
 - **Maven**
 
 ## 🚀 Quick Start
+
+### Development Mode (H2 - No Setup Required)
+
+```bash
+# Start services in order (uses H2 in-memory database)
+cd StudentManagementServer && mvn spring-boot:run      # Eureka (8761)
+cd StudentRecordManagementSystem && mvn spring-boot:run # Student (1111)
+cd StudentCourseManagementSystem && mvn spring-boot:run # Course (2222)
+cd StudentGradeManagementSystem && mvn spring-boot:run  # Grade (3333)
+cd StudentAPIGateway && mvn spring-boot:run             # Gateway (4444)
+```
+
+✅ **Works instantly on any machine** - no database setup needed!
+
+### Production Mode (MySQL)
 
 ```bash
 # 1. Create MySQL database
 mysql -u root -p -e "CREATE DATABASE studentdb;"
 
-# 2. Start services in order
-cd StudentManagementServer && mvn spring-boot:run      # Eureka
-cd StudentRecordManagementSystem && mvn spring-boot:run # Student
-cd StudentCourseManagementSystem && mvn spring-boot:run # Course
-cd StudentGradeManagementSystem && mvn spring-boot:run  # Grade
-cd StudentAPIGateway && mvn spring-boot:run             # Gateway
+# 2. Start services with prod profile
+cd StudentManagementServer && mvn spring-boot:run
+cd StudentRecordManagementSystem && mvn spring-boot:run -Dspring.profiles.active=prod
+cd StudentCourseManagementSystem && mvn spring-boot:run -Dspring.profiles.active=prod
+cd StudentGradeManagementSystem && mvn spring-boot:run -Dspring.profiles.active=prod
+cd StudentAPIGateway && mvn spring-boot:run
 ```
+
+### Environment Variables (Production)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `SPRING_PROFILES_ACTIVE` | (none) | Set to `prod` for MySQL |
+| `MYSQL_URL` | `jdbc:mysql://localhost:3306/studentdb` | MySQL connection URL |
+| `MYSQL_USER` | `root` | MySQL username |
+| `MYSQL_PASSWORD` | `root` | MySQL password |
+| `CORS_ORIGIN` | `*` | Frontend URL for CORS |
 
 ## 📡 API Endpoints
 
@@ -106,6 +133,8 @@ cd StudentAPIGateway && mvn spring-boot:run             # Gateway
 - **User Authentication** - Login/Signup functionality
 - **Data Validation** - Bean Validation API
 - **Exception Handling** - Global error handling
+- **Dual Database Support** - H2 (dev) & MySQL (prod)
+- **CORS Configured** - Frontend integration ready
 
 ## 📁 Project Structure
 
@@ -116,6 +145,13 @@ cd StudentAPIGateway && mvn spring-boot:run             # Gateway
 ├── StudentGradeManagementSystem/    # Grade Management
 └── StudentAPIGateway/               # Zuul Gateway
 ```
+
+## 🔧 Configuration Files
+
+| File | Purpose |
+|------|---------|
+| `application.properties` | Default config (H2 database) |
+| `application-prod.properties` | Production config (MySQL) |
 
 ## 👤 Author
 

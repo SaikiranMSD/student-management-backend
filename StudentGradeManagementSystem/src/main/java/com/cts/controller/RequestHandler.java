@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cts.client1.StudentServiceClient;
 import com.cts.client2.StudentCourseClient;
-import com.cts.dao.IStudentRecordManagement;
 import com.cts.entity.Enrollment;
 import com.cts.service.StduentGradeServiceImpl;
 
@@ -29,9 +28,6 @@ public class RequestHandler {
 
 	@Autowired
 	private StudentServiceClient client1;
-
-	@Autowired
-	private IStudentRecordManagement dao1;
 
 	@Autowired
 	private StduentGradeServiceImpl service;

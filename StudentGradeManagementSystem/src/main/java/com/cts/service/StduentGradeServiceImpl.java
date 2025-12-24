@@ -11,9 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cts.IdNotFoundException.IdNotFoundException;
 import com.cts.dao.IStudentGradeDao;
-import com.cts.dao.IStudentRecordManagement;
 import com.cts.entity.Enrollment;
-import com.cts.entity.Student;
 
 @Service
 @Transactional
@@ -24,60 +22,44 @@ public class StduentGradeServiceImpl implements IStudentGradeService {
 	@Autowired
 	private IStudentGradeDao dao;
 
-	@Autowired
-	private IStudentRecordManagement dao1;
-
 	@Override
 	public String postMarks(Enrollment enroll) {
 		logger.info("Posting marks for student ID: {}", enroll.getStudentId());
-		Optional<Student> stud = dao1.findById(enroll.getStudentId());
-		if (stud.isPresent()) {
-			Integer marks1 = enroll.getMarksInSubject1();
-			Integer marks2 = enroll.getMarksInSubject2();
-			Integer marks = marks1 + marks2;
-			double totalMarks = 200;
-			double percentage = ((marks1 + marks2) / (double) totalMarks) * 100;
-			enroll.setPercentage(percentage + "%");
-			enroll.setStatus((marks >= 100) ? "PASS" : "FAIL");
-			if (marks >= 180) {
-				enroll.setGrade("A+");
-			} else if (marks >= 160) {
-				enroll.setGrade("A");
-			} else if (marks >= 140) {
-				enroll.setGrade("B+");
-			} else if (marks >= 120) {
-				enroll.setGrade("B");
-			} else if (marks >= 100) {
-				enroll.setGrade("C");
-			} else {
-				enroll.setGrade("F");
-			}
-			dao.save(enroll);
-			logger.info("Marks posted for student ID: {}", enroll.getStudentId());
-			logger.debug("Marks data: {}", enroll);
-			return "Grade Calculated for the StudentId: " + enroll.getStudentId();
+		// Student validation is done in controller via Feign client
+		Integer marks1 = enroll.getMarksInSubject1();
+		Integer marks2 = enroll.getMarksInSubject2();
+		Integer marks = marks1 + marks2;
+		double totalMarks = 200;
+		double percentage = ((marks1 + marks2) / (double) totalMarks) * 100;
+		enroll.setPercentage(percentage + "%");
+		enroll.setStatus((marks >= 100) ? "PASS" : "FAIL");
+		if (marks >= 180) {
+			enroll.setGrade("A+");
+		} else if (marks >= 160) {
+			enroll.setGrade("A");
+		} else if (marks >= 140) {
+			enroll.setGrade("B+");
+		} else if (marks >= 120) {
+			enroll.setGrade("B");
+		} else if (marks >= 100) {
+			enroll.setGrade("C");
 		} else {
-			logger.error("Student not found with ID: {}", enroll.getStudentId());
-			return "Student Not Found";
+			enroll.setGrade("F");
 		}
+		dao.save(enroll);
+		logger.info("Marks posted for student ID: {}", enroll.getStudentId());
+		logger.debug("Marks data: {}", enroll);
+		return "Grade Calculated for the StudentId: " + enroll.getStudentId();
 	}
 
 	@Override
 	public Enrollment getMarksSheet(Integer id) {
 		logger.info("Getting marks sheet for student ID: {}", id);
-		Optional<Student> stud = dao1.findById(id);
-		if (stud.isPresent()) {
-			Enrollment enrollment = null;
-			Optional<Enrollment> enroll = dao.findById(id);
-			if (enroll.isPresent()) {
-				enrollment = enroll.get();
-			} else {
-				throw new IdNotFoundException("MarksSheet Not Found With the given Id " + id);
-			}
-			logger.debug("Marks sheet: {}", enrollment);
-			return enrollment;
+		Optional<Enrollment> enroll = dao.findById(id);
+		if (enroll.isPresent()) {
+			logger.debug("Marks sheet: {}", enroll.get());
+			return enroll.get();
 		} else {
-			logger.error("Student not found with ID: {}", id);
 			throw new IdNotFoundException("MarksSheet Not Found With the given Id " + id);
 		}
 	}

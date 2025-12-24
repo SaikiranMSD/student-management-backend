@@ -35,10 +35,4 @@ public class ErrorDetails {
 		return "ErrorDetails [time=" + time + ", message=" + message + "]";
 	}
 
-	public ErrorDetails(LocalDateTime time, String message) {
-		super();
-		this.time = time;
-		this.message = message;
-	}
-
 }
