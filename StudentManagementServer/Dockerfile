@@ -4,7 +4,7 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-FROM openjdk:8-jre-alpine
+FROM eclipse-temurin:8-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.war app.war
 EXPOSE 8761
