@@ -21,16 +21,16 @@ public class StudentApiGatewayApplication {
 	@Bean
 	public CorsFilter corsFilter() {
 		CorsConfiguration config = new CorsConfiguration();
-		// Allow all origins for deployment flexibility (or set via CORS_ORIGIN env var)
 		String corsOrigin = System.getenv("CORS_ORIGIN");
 		if (corsOrigin != null && !corsOrigin.isEmpty()) {
 			config.addAllowedOrigin(corsOrigin);
+			config.setAllowCredentials(true);
 		} else {
-			config.addAllowedOriginPattern("*");
+			config.addAllowedOrigin("*");
+			config.setAllowCredentials(false);
 		}
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
-		config.setAllowCredentials(true);
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
